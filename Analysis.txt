@@ -1,0 +1,93 @@
+Answer the following questions about the code in ChainedArraysPerformance.java.
+
+1. ChainedArraysPerformance contains the comment "// warm up the JVM". 
+a. What does the JVM do to the program during execution that might affect the performance results?
+
+The JVM warmup usually refers to the time it takes for the JVM to find the hotspots and JIT these sections of the code. If you run your actual tests a few hundred (actually a few thousand I believe) times you should be fairly good to go.
+You should however know that, even if you do this, there are no guarantees. You'll have to experiment with your particular JVM to figure out how much work you have to do before the vital parts is JITed and so on.
+
+b. When is the JVM considered to be warmed up?
+
+Ensure the test runs for a long time AFTER a long warmup. 30s is bare minimum for the real measurement period, after an equally long warmup, if possible. 
+For example, run for several minutes per iteration, for multiple iterations.
+
+This article may help: 
+
+   http://www.javaworld.com/article/2077337/build-ci-sdlc/watch-your-hotspot-compiler-go.html
+
+2, ChainedArraysPerformance contains code like the following:
+
+       long before = System.nanoTime();
+       myMethod()
+       D = (System.nanoTime() - before) / 1000;
+
+a. What does the value returned by System.nanoTime() represent? Make sure that you specify the unit of time.
+This function Returns the current value of the running Java Virtual Machine's high-resolution time source, in nanoseconds.
+
+b. What does D represent? Make sure that you specify the unit of time. Note the division: / 1000;
+This D represents the time of execution of myMethod() in micro-seconds.
+
+3. Show the results of executing ChainedArraysPerformance on your ChainedArrays class.
+
+add:
+           size   ChainedArrays(1)    ChainedArrays(16)    ChainedArrays(size)
+            100         64 ( 492%)    19         (146%)     13         (100%)
+            200        205 ( 707%)    29         (100%)     30         (103%)
+            500        800 ( 964%)    83         (100%)     110        (133%)
+           1000       3400 (1525%)    223        (100%)     340        (152%)
+           2000      15164 (2214%)    685        (100%)     926        (135%)
+           3000      35635 (2657%)    1403       (105%)     1341       (100%)
+           4000      69210 (3342%)    2602       (126%)     2071       (100%)
+           8000     413233 (9788%)    12017      (285%)     4222       (100%)
+
+
+contains:
+           size   ChainedArrays(1)    ChainedArrays(16)    ChainedArrays(size)
+            100       1393 ( 948%)    612        (416%)     147        (100%)
+            200        589 ( 107%)    564        (103%)     548        (100%)
+            500       3957 ( 237%)    1673       (100%)     1746       (104%)
+           1000       7823 ( 119%)    6596       (100%)     6673       (101%)
+           2000      31959 ( 118%)    27004      (100%)     27186      (101%)
+           3000      77378 ( 126%)    61240      (100%)     63213      (103%)
+           4000     154248 ( 144%)    110427     (103%)     107172     (100%)
+           8000     842526 ( 193%)    445104     (102%)     436492     (100%)
+
+
+removeFirst:
+           size   ChainedArrays(1)    ChainedArrays(16)    ChainedArrays(size)
+            100         83 ( 173%)    62         (129%)     48         (100%)
+            200         86 ( 146%)    61         (103%)     59         (100%)
+            500         70 ( 113%)    62         (100%)     146        (235%)
+           1000         74 ( 100%)    84         (114%)     875        (1182%)
+           2000        292 ( 100%)    330        (113%)     2072       (710%)
+           3000        125 ( 100%)    138        (110%)     2049       (1639%)
+
+4. Answer these questions about methods add and contains:
+a. What is the Big-oh complexity of your add and contains methods for ChainedArrays with an array capacity of 1?
+Big-oh complexity for add and contains method is O(n) for capacity of 1.
+
+b. What is the Big-oh complexity of your add and contains methods for ChainedArrays with an array capacity of 16?
+Big-oh complexity for add and contains method is O(n) for capacity of 16.
+
+c. What is the Big-oh complexity of your add and contains methods for ChainedArrays with an array capacity of size?
+Big-oh complexity for add and contains method is O(n) for capacity of size.
+
+d. Are the results of ChainedArraysPerformance for your add and contains methods consistent with the 
+   Big-oh complexities? Explain by considering which ChainedArrays had the best performance.
+
+chainedArray sized size has the best performance. as operations tend to be almost same time taking for larger data sets. 
+   
+5. Answer these questions about method removeFirst:
+a. What is the Big-oh running time of your removeFirst method for ChainedArrays with an array capacity of 1?
+complexity is O(n) for chainedArray size 1. 
+
+b. What is the Big-oh running time of your removeFirst method for ChainedArrays with an array capacity of 16?
+complexity is O(n) for chainedArray size 16. 
+
+c. What is the Big-oh running time of your removeFirst method for ChainedArrays with an array capacity of size?
+complexity is O(n) for chainedArray size size. 
+d. Are the results of ChainedArraysPerformance for your removeFirst method consistent with the 
+   Big-oh complexities? Explain by considering which ChainedArrays had the best performance.
+   
+   Chained Arrays with size 1 has better performance as compaction in this case takes less time in moving elements. 
+   
